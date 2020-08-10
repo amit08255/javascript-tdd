@@ -1,0 +1,6 @@
+build/*
+node_modules/*
+.next/*
+.gitignore
+dist/*
+!.eslintrc.js
