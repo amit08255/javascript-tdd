@@ -1,6 +1,7 @@
 const {
     addDevKeyToRequest, addUsernameToRequest, addPasswordToRequest,
-    addUserKeyToRequest, addResultLimitToRequest } = require('.');
+    addUserKeyToRequest, addResultLimitToRequest,
+} = require('.');
 
 describe('Add Dev Key to Request', () => {
     test('Should add dev key to json', () => {
@@ -18,10 +19,11 @@ describe('Add Dev Key to Request', () => {
         expect(finalJson).toEqual(expectedJson);
     });
 
-    test('Should through error when passed json is null', () => {
+    test('Should add dev key to default json when passed json is null', () => {
         const devKey = '1234';
-        const addDevKey = addDevKeyToRequest(devKey);
-        expect(() => addDevKey(null)).toThrow(Error);
+        const expectedJson = { api_dev_key: devKey };
+        const finalJson = addDevKeyToRequest(devKey)(null);
+        expect(finalJson).toEqual(expectedJson);
     });
 
     test('Should add dev key to default json when passed json is undefined', () => {
@@ -48,10 +50,11 @@ describe('Add Password to Request', () => {
         expect(finalJson).toEqual(expectedJson);
     });
 
-    test('Should through error when passed json is null', () => {
+    test('Should add password to default json when passed json is null', () => {
         const password = 'amit';
-        const addPassword = addPasswordToRequest(password);
-        expect(() => addPassword(null)).toThrow(Error);
+        const expectedJson = { api_user_password: password };
+        const finalJson = addPasswordToRequest(password)(null);
+        expect(finalJson).toEqual(expectedJson);
     });
 
     test('Should add password to default json when passed json is undefined', () => {
@@ -78,10 +81,11 @@ describe('Add Username to Request', () => {
         expect(finalJson).toEqual(expectedJson);
     });
 
-    test('Should through error when passed json is null', () => {
+    test('Should add username to default json when passed json is null', () => {
         const username = 'amit';
-        const addUsername = addUsernameToRequest(username);
-        expect(() => addUsername(null)).toThrow(Error);
+        const expectedJson = { api_user_name: username };
+        const finalJson = addUsernameToRequest(username)();
+        expect(finalJson).toEqual(expectedJson);
     });
 
     test('Should add username to default json when passed json is undefined', () => {
@@ -108,10 +112,11 @@ describe('Add User Key to Request', () => {
         expect(finalJson).toEqual(expectedJson);
     });
 
-    test('Should through error when passed json is null', () => {
+    test('Should add user key to default json when passed json is null', () => {
         const userKey = 'amit';
-        const addUsername = addUserKeyToRequest(userKey);
-        expect(() => addUsername(null)).toThrow(Error);
+        const expectedJson = { api_user_key: userKey };
+        const finalJson = addUserKeyToRequest(userKey)();
+        expect(finalJson).toEqual(expectedJson);
     });
 
     test('Should add user key to default json when passed json is undefined', () => {
@@ -138,10 +143,11 @@ describe('Add Result Limit to Request', () => {
         expect(finalJson).toEqual(expectedJson);
     });
 
-    test('Should through error when passed json is null', () => {
+    test('Should add result limit to default json when passed json is null', () => {
         const limit = 100;
-        const addUsername = addResultLimitToRequest(limit);
-        expect(() => addUsername(null)).toThrow(Error);
+        const expectedJson = { api_results_limit: limit };
+        const finalJson = addResultLimitToRequest(limit)();
+        expect(finalJson).toEqual(expectedJson);
     });
 
     test('Should add result limit to default json when passed json is undefined', () => {

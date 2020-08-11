@@ -1,5 +1,3 @@
-import deepClone from './deep-clone';
-
 /**
  * Compose utility to design reusable code with small functions in pipeline.
  * Functions in compose utility is executed from right to left.
@@ -97,11 +95,23 @@ export const getNull = () => null;
 
 export const getFirstArrayElement = (data) => data[0];
 
-export const setJsonValue = (key) => (value) => (json = {}) => {
-    const newJson = deepClone(json);
-    newJson[key] = value;
-    return newJson;
-};
+/**
+ * Makes a shallow clone of an object, setting or overriding the specified
+ * property with the given value. Note that this copies and flattens prototype
+ * properties onto the new object as well. All non-primitive properties are
+ * copied by reference.
+ *
+ * @func
+ * @param {String} prop The property name to set
+ * @returns {(newValue:any) => (obj:any) => any}
+ * @example
+ *
+ *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+ */
+
+export const assoc = (prop) => (newValue) => (obj = {}) => ({
+    ...obj, [prop]: newValue,
+});
 
 export const getPromiseFromValue = (value) => (new Promise(
     (resolve) => {
