@@ -93,7 +93,13 @@ export const getEmptyArray = () => [];
 
 export const getNull = () => null;
 
-export const getFirstArrayElement = (data) => data[0];
+/**
+ * Returns a string made by inserting the `separator` between each element and
+ * concatenating all the elements into a single string.
+ * @param {string} str
+ * @returns {(list:Array<any>) => string}
+ */
+export const join = (str) => (list) => list.join(str);
 
 /**
  * Makes a shallow clone of an object, setting or overriding the specified
