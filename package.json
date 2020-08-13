@@ -17,8 +17,11 @@
   "author": "Amit Kumar",
   "license": "ISC",
   "dependencies": {
+    "@open-draft/until": "^1.0.3",
     "@zeit/next-css": "^1.0.1",
     "axios": "^0.19.2",
+    "debug": "^4.1.1",
+    "headers-utils": "^1.2.0",
     "next": "^9.5.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
