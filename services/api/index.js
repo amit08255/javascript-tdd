@@ -52,6 +52,8 @@ const getPastbinApiConfig = (url) => (data) => (
     })
 );
 
+export const extractApiResponseData = (response) => response.data;
+
 export const addDevKeyToRequest = (devKey) => assoc('api_dev_key')(devKey);
 
 export const addUserKeyToRequest = (userKey) => assoc('api_user_key')(userKey);

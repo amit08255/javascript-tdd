@@ -1,6 +1,6 @@
 const {
     addDevKeyToRequest, addUsernameToRequest, addPasswordToRequest,
-    addUserKeyToRequest, addResultLimitToRequest,
+    addUserKeyToRequest, addResultLimitToRequest, extractApiResponseData,
 } = require('.');
 
 describe('Add Dev Key to Request', () => {
@@ -155,5 +155,18 @@ describe('Add Result Limit to Request', () => {
         const expectedJson = { api_results_limit: limit };
         const finalJson = addResultLimitToRequest(limit)(undefined);
         expect(finalJson).toEqual(expectedJson);
+    });
+});
+
+describe('extractApiResponseData test', () => {
+    test('Should return API response data', () => {
+        const response = { data: 'fa24fa7555bc7ecf3185ea747c5e0d6d' };
+        const data = extractApiResponseData(response);
+        expect(data).toBe(response.data);
+    });
+
+    test('Should throw error when response not valid JSON', () => {
+        const response = null;
+        expect(() => extractApiResponseData(response)).toThrow(Error);
     });
 });
