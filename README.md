@@ -104,7 +104,7 @@ Because integration tests test collaborative integrations between units, it’s 
 
 In this project for mocking network requests, we are using [Axios Mock Adapter](https://github.com/ctimmerm/axios-mock-adapter) which allows us to intercept and check if API request is correct and response is handled correctly.
 
-### Built With
+## Built With
 This project is designed with technologies listed below - 
 * [Next.JS](https://nextjs.org)
 * [React](https://reactjs.org)
