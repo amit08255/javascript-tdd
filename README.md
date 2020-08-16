@@ -107,7 +107,7 @@ Sometimes you’ll want to test how your unit will communicate with a 3rd party 
 
 There are lots of useful integration testing tools that throttle network bandwidth, introduce network lag, produce network errors, and otherwise test lots of other conditions that are impossible to test using unit tests which mock away the communication layer.
 
-In this project for mocking network requests, we are using [Axios Mock Adapter](https://github.com/ctimmerm/axios-mock-adapter) which allows us to intercept and check if API request is correct and response is handled correctly.
+In this project for mocking network requests, we are using [Axios Mock Adapter](https://github.com/ctimmerm/axios-mock-adapter) which allows us to intercept and check if API request is correct and response is handled correctly. **Axios Mock Adapter** library is used along with [Axios](https://github.com/axios/axios) which is simple to use library to make HTTP requests in both NodeJS and browser.
 
 ## Organizing test files
 
