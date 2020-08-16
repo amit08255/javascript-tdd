@@ -19,7 +19,8 @@
 * [How to write testable code](#how-to-write-testable-code)
 * [What is unit test?](#what-is-unit-test)
 * [What is integration test?](#what-is-integration-test)
-  * [Built With](#built-with)
+* [Organizing test files](#organizing-test-files)
+* [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Installation](#installation)
 * [Usage](#usage)
@@ -107,6 +108,10 @@ Sometimes you’ll want to test how your unit will communicate with a 3rd party 
 There are lots of useful integration testing tools that throttle network bandwidth, introduce network lag, produce network errors, and otherwise test lots of other conditions that are impossible to test using unit tests which mock away the communication layer.
 
 In this project for mocking network requests, we are using [Axios Mock Adapter](https://github.com/ctimmerm/axios-mock-adapter) which allows us to intercept and check if API request is correct and response is handled correctly.
+
+## Organizing test files
+
+Organizing test files are important in order to make things easier. Create **__tests__** directory in your project root directory. Inside **__tests__** directory create two sub-directories - **specs** and **unit** where **specs** directory will contain integration test files with extension - **.spec.js** and **unit** directory will contain unit test files with extension - **.test.js**
 
 ## Built With
 This project is designed with technologies listed below - 
