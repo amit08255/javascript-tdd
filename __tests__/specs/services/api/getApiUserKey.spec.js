@@ -1,6 +1,6 @@
 import axios from 'axios';
 import AxiosMockAdapter from 'utilities/http-interceptor';
-import { getApiUserKey } from '.';
+import { getApiUserKey } from 'services/api';
 
 let mock = null;
 
@@ -11,10 +11,17 @@ beforeAll(() => {
 describe('getApiUserKey test', () => {
     const API_URL = 'https://pastebin.com/api/api_login.php';
 
+    test('should return promise', () => {
+        const mockedData = { x: 1 };
+        mock.onPost(API_URL).reply(() => [200, mockedData]);
+        const username = '1'; const password = '2'; const devKey = 'x';
+        const promise = getApiUserKey({ username, password, devKey });
+        expect(promise instanceof Promise).toBeTruthy();
+    });
+
     test('is api request made', async () => {
         const mockedData = { x: 1 };
         mock.onPost(API_URL).reply(() => [200, mockedData]);
-
         const username = '1'; const password = '2'; const devKey = 'x';
         const response = await getApiUserKey({ username, password, devKey });
 
@@ -25,12 +32,9 @@ describe('getApiUserKey test', () => {
     test('is api request converted to form-urlencoded', async () => {
         const mockedData = { x: 1 };
         mock.onPost(API_URL).reply(() => [200, mockedData]);
-
         const requestData = { username: 1, password: 'x', devKey: 'y' };
         const formEncodedRequest = 'api_user_name=1&api_user_password=x&api_dev_key=y';
-
         const response = await getApiUserKey(requestData);
-
         expect(response.config.data).toBe(formEncodedRequest);
     });
 });

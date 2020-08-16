@@ -76,4 +76,12 @@ export const getApiUserKey = ({ username, password, devKey }) => compose(
     addUsernameToRequest(username),
 )({});
 
+export const getUserPasteList = ({ userKey, devKey, resultLimit }) => compose(
+    startApiRequest,
+    getPastbinApiConfig('https://pastebin.com/api/api_post.php'),
+    addResultLimitToRequest(resultLimit),
+    addDevKeyToRequest(devKey),
+    addUserKeyToRequest(userKey),
+)({});
+
 export default { addDevKeyToRequest, addUsernameToRequest };
