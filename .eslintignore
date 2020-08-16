@@ -3,4 +3,5 @@ node_modules/*
 .next/*
 .gitignore
 dist/*
+packages/*
 !.eslintrc.js

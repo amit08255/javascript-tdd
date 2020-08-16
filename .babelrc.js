@@ -14,7 +14,9 @@ module.exports = {
     ["module-resolver", {
     "root": ["./dist"],
     "alias": {
-        "utilities": "./utilities"
+        "utilities": "./utilities",
+        "components": "./components",
+        "packages": "./packages"
     }
     }],
     [
