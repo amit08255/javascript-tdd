@@ -17,8 +17,8 @@
 
 * [Introduction](#introduction)
 * [How to write testable code](#how-to-write-testable-code)
-* [What is unit test?](#what-is-unit-test?)
-* [What is integration test?](#what-is-integration-test?)
+* [What is unit test?](#what-is-unit-test)
+* [What is integration test?](#what-is-integration-test)
   * [Built With](#built-with)
 * [Getting Started](#getting-started)
   * [Installation](#installation)
