@@ -2,10 +2,10 @@
 <br />
 <p align="center">
 
-  <h1 align="center">ReactJS NextJS TDD</h1>
+  <h1 align="center">JavaScript TDD</h1>
 
   <p align="center">
-    This is a simple project to demonstrate how to design ReactJS apps with test-driven development.
+    This is a simple project to demonstrate how to design JavaScript applications with test-driven development. This application is designed with ReactJS NextJS and uses Jest testing library.
     <br />
   </p>
 </p>
@@ -131,7 +131,7 @@ Then to get started with this project, you just need to clone or download this r
 
 1. Clone the repo
 ```sh
-git clone https://github.com/amit08255/reactjs-nextjs-tdd.git
+git clone https://github.com/amit08255/javascript-tdd.git
 ```
 2. Install NPM packages
 ```sh
@@ -194,5 +194,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Amit Kumar - [@amit08255](https://twitter.com/amit08255) - amitcute3@gmail.com
 
-Project Link: [https://github.com/amit08255/reactjs-nextjs-tdd](https://github.com/amit08255/reactjs-nextjs-tdd)
+Project Link: [https://github.com/amit08255/javascript-tdd](https://github.com/amit08255/javascript-tdd)
 
