@@ -12,14 +12,14 @@ const Container = () => {
             <input
                 placeholder="Username"
                 value={username}
-                onChange={(e) => dispatch('username', e)}
+                onChange={(e) => dispatch('username', e.target.value)}
             />
 
             <input
                 placeholder="Password"
                 type="password"
                 value={password}
-                onChange={(e) => dispatch('password', e)}
+                onChange={(e) => dispatch('password', e.target.value)}
             />
         </div>
     );
