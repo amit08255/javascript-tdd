@@ -1,52 +1,50 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import {
-    compose, withState, withHandlers, withStateHandlers,
-} from 'packages/proppy';
+import { createStoreon } from 'storeon';
+import { storeonLogger } from 'storeon/devtools';
+import { useStoreon, StoreContext } from 'storeon/react';
 
-import { attach } from 'packages/proppy-react';
+// Initial state, reducers and business logic are packed in independent modules
+const homepage = (store) => {
+    // Initial state
+    store.on('@init', () => ({ username: '', password: '' }));
+    // Reducers returns only changed part of the state
+    store.on('username', (state, e) => ({
+        username: e.target.value,
+    }));
 
-const P = compose(
-    withState('notesList', 'setNotesList', []),
-    withState('isLoading', 'setLoading', false),
-    withStateHandlers(
-        { username: '' },
-        { handleUsername: () => (e) => ({ username: e.target.value }) },
-    ),
-    withStateHandlers(
-        { password: '' },
-        { handlePassword: () => (e) => ({ password: e.target.value }) },
-    ),
-    withHandlers({
-        handleFetch: (props) => () => props,
-    }),
-);
+    store.on('password', (state, e) => ({
+        password: e.target.value,
+    }));
+};
 
-function Homepage({
-    username, password, isLoading, handleFetch, handleUsername, handlePassword,
-}) {
-    if (isLoading === true) {
-        return (
-            <div>Loading...</div>
-        );
-    }
+const store = createStoreon([homepage]);
+
+const Container = () => {
+    // Counter will be re-render only on `state.username` changes
+    const { dispatch, username, password } = useStoreon(['username', 'password', storeonLogger(store)]);
 
     return (
         <div>
-            <input type="text" value={username} onChange={handleUsername} />
-            <input type="text" value={password} onChange={handlePassword} />
-            <button type="button" onClick={() => handleFetch()}>Submit</button>
+            <input
+                placeholder="Username"
+                value={username}
+                onChange={(e) => dispatch('username', e)}
+            />
+
+            <input
+                placeholder="Password"
+                type="password"
+                value={password}
+                onChange={(e) => dispatch('password', e)}
+            />
         </div>
     );
-}
-
-Homepage.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    isLoading: PropTypes.bool.isRequired,
-    handleFetch: PropTypes.func.isRequired,
-    handleUsername: PropTypes.func.isRequired,
-    handlePassword: PropTypes.func.isRequired,
 };
 
-export default attach(P)(Homepage);
+const Homepage = () => (
+    <StoreContext.Provider value={store}>
+        <Container />
+    </StoreContext.Provider>
+);
+
+export default Homepage;

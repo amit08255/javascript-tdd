@@ -5,8 +5,8 @@
       "*": ["./*"],
       "utilities/*": ["./utilities/*"],
       "services/*": ["./services/*"],
-      "packages/*": ["./packages/*"],
       "components/*": ["./components/*"],
+      "stores/*": ["./stores/*"],
       "storeon/*": ["./storeon/*"]
 
     }
