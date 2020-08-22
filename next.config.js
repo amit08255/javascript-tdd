@@ -12,6 +12,8 @@ const nextConfiguration = withCSS({
         newConfig.resolve.alias.utilities = path.join(__dirname, 'utilities'); // folder alias 1
         newConfig.resolve.alias.packages = path.join(__dirname, 'packages'); // folder alias 2
         newConfig.resolve.alias.components = path.join(__dirname, 'components'); // folder alias 3
+        newConfig.resolve.alias.components = path.join(__dirname, 'storeon'); // folder alias 4
+        newConfig.resolve.alias.components = path.join(__dirname, 'services'); // folder alias 5
         return newConfig;
     },
 });

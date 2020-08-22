@@ -16,7 +16,9 @@ module.exports = {
     "alias": {
         "utilities": "./utilities",
         "components": "./components",
-        "packages": "./packages"
+        "packages": "./packages",
+        "services": "./services",
+        "storeon": "./storeon"
     }
     }],
     [

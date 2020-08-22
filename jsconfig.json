@@ -6,7 +6,9 @@
       "utilities/*": ["./utilities/*"],
       "services/*": ["./services/*"],
       "packages/*": ["./packages/*"],
-      "components/*": ["./components/*"]
+      "components/*": ["./components/*"],
+      "storeon/*": ["./storeon/*"]
+
     }
   },
   "exclude": ["./node_modules/", "./.next/", "./dist/", "./coverage/"]

@@ -7,7 +7,8 @@ module.exports = {
       "^services/(.*)": "<rootDir>/services/$1",
       "^contexts/(.*)": "<rootDir>/contexts/$1",
       "^components/(.*)": "<rootDir>/components/$1",
-      "^containers/(.*)": "<rootDir>/containers/$1"
+      "^containers/(.*)": "<rootDir>/containers/$1",
+      "^storeon/(.*)": "<rootDir>/storeon/$1"
     }, */
     coveragePathIgnorePatterns: [
         '/node_modules/',
