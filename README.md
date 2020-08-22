@@ -112,6 +112,7 @@ In this project for mocking network requests, we are using [Axios Mock Adapter](
 ## Organizing test files
 
 Organizing test files are important in order to make things easier. Create **__tests__** directory in your project root directory. Inside **__tests__** directory create two sub-directories - **specs** and **unit** where **specs** directory will contain integration test files with extension - **.spec.js** and **unit** directory will contain unit test files with extension - **.test.js**
+Remember that you should store all your test files related to a particular module near its source code which makes this easier while development whereas test files such which tests entire app with e2e tests or tests a particular page of app should be placed in **__tests__** directory
 
 ## Built With
 This project is designed with technologies listed below - 
