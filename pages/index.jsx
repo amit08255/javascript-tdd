@@ -4,8 +4,12 @@ import { storeonLogger } from 'storeon/devtools';
 import { useStoreon, StoreContext } from 'storeon/react';
 
 const Container = () => {
+    const devKey = 'HF7L8scxdRXF76KYrtoDyrQCOVoVwqR_';
+
     // Counter will be re-render only on `state.username` changes
-    const { dispatch, username, password } = useStoreon(['username', 'password', storeonLogger(store)]);
+    const { dispatch, username, password } = useStoreon([
+        'username', 'password', 'get/userkey', storeonLogger(store),
+    ]);
 
     return (
         <div>
@@ -21,6 +25,8 @@ const Container = () => {
                 value={password}
                 onChange={(e) => dispatch('password', e.target.value)}
             />
+
+            <button onClick={() => dispatch('get/userkey', devKey)} type="button">Submit</button>
         </div>
     );
 };
