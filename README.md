@@ -126,7 +126,9 @@ Follow below rules to make your components testable and reusable -
 
 * Do not test internals of your component such as states. Your tests must be independent of internal working of your components.
 
-* Your components should be independent and should not depend on other components of modules.
+* Your components should be independent and should not depend on other components or modules.
+
+* Receive all event handlers as props which makes testing easier when you want to test if your component events are working correctly.
 
 ## Organizing test files
 
