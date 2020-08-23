@@ -4,6 +4,7 @@ import { createStoreon } from 'storeon';
 import { storeonLogger } from 'storeon/devtools';
 import { useStoreon, StoreContext } from 'storeon/react';
 import { getApiUserKey } from 'services/api';
+import Login from 'components/login';
 
 const store = createStoreon([homepage]);
 
@@ -15,7 +16,7 @@ const Container = () => {
         'username', 'password', 'get/userkey', storeonLogger(store),
     ]);
 
-    const onButtonClick = () => {
+    const onSubmitClick = () => {
         const data = {
             username: store.get().username,
             password: store.get().password,
@@ -28,25 +29,13 @@ const Container = () => {
 
     return (
         <div>
-            <input
-                placeholder="Username"
-                value={username}
-                onChange={(e) => dispatch('username', e.target.value)}
+            <Login
+                username={username}
+                password={password}
+                onUsernameChange={(e) => dispatch('username', e.target.value)}
+                onPasswordChange={(e) => dispatch('password', e.target.value)}
+                onSubmit={onSubmitClick}
             />
-
-            <input
-                placeholder="Password"
-                type="password"
-                value={password}
-                onChange={(e) => dispatch('password', e.target.value)}
-            />
-
-            <button
-                onClick={onButtonClick}
-                type="button"
-            >
-                Submit
-            </button>
         </div>
     );
 };
