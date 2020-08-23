@@ -28,15 +28,13 @@ const Container = () => {
     };
 
     return (
-        <div>
-            <Login
-                username={username}
-                password={password}
-                onUsernameChange={(e) => dispatch('username', e.target.value)}
-                onPasswordChange={(e) => dispatch('password', e.target.value)}
-                onSubmit={onSubmitClick}
-            />
-        </div>
+        <Login
+            username={username}
+            password={password}
+            onUsernameChange={(e) => dispatch('username', e.target.value)}
+            onPasswordChange={(e) => dispatch('password', e.target.value)}
+            onSubmit={onSubmitClick}
+        />
     );
 };
 

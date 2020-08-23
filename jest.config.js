@@ -1,7 +1,7 @@
 module.exports = {
     rootDir: './',
     verbose: true,
-    testEnvironment: 'node',
+    testEnvironment: 'jsdom',
     /* "moduleNameMapper": {
       "^utilities/(.*)": "<rootDir>/utilities/$1",
       "^services/(.*)": "<rootDir>/services/$1",
@@ -22,5 +22,8 @@ module.exports = {
         'json',
         'node',
     ],
+    transform: {
+        '^.+\\.(js|jsx)$': 'babel-jest',
+    },
     testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/dist/'],
 };

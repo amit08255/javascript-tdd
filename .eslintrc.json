@@ -27,7 +27,7 @@
         "sourceType": "module"
     },
     "plugins": [
-        "react"
+        "react", "jest-dom"
     ],
     "rules": {
         "template-curly-spacing" : "off",
@@ -39,6 +39,10 @@
         "react/jsx-indent": ["error", 4],
         // Indent props with 4 spaces
         "react/jsx-indent-props": ["error", 4],
-        "react/react-in-jsx-scope": "off"
+        "react/react-in-jsx-scope": "off",
+        "jest-dom/prefer-checked": "error",
+        "jest-dom/prefer-enabled-disabled": "error",
+        "jest-dom/prefer-required": "error",
+        "jest-dom/prefer-to-have-attribute": "error"
     }
 }
