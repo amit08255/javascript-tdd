@@ -126,6 +126,8 @@ Follow below rules to make your components testable and reusable -
 
 * Do not test internals of your component such as states. Your tests must be independent of internal working of your components.
 
+* Your components should be independent and should not depend on other components of modules.
+
 ## Organizing test files
 
 Organizing test files are important in order to make things easier. Create **__tests__** directory in your project root directory. Inside **__tests__** directory create two sub-directories - **specs** and **unit** where **specs** directory will contain integration test files with extension - **.spec.js** and **unit** directory will contain unit test files with extension - **.test.js**
