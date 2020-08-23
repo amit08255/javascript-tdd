@@ -17,8 +17,9 @@
 
 * [Introduction](#introduction)
 * [How to write testable code](#how-to-write-testable-code)
-* [What is unit test?](#what-is-unit-test)
-* [What is integration test?](#what-is-integration-test)
+* [What is the unit test?](#what-is-the-unit-test)
+* [What is an integration test?](#what-is-an-integration-test)
+* [Writing testable React components](#writing-testable-react-components)
 * [Organizing test files](#organizing-test-files)
 * [Built With](#built-with)
 * [Getting Started](#getting-started)
@@ -108,6 +109,22 @@ Sometimes you’ll want to test how your unit will communicate with a 3rd party 
 There are lots of useful integration testing tools that throttle network bandwidth, introduce network lag, produce network errors, and otherwise test lots of other conditions that are impossible to test using unit tests that mock away the communication layer.
 
 In this project for mocking network requests, we are using [Axios Mock Adapter](https://github.com/ctimmerm/axios-mock-adapter) which allows us to intercept and check if API request is correct and response is handled correctly. **Axios Mock Adapter** library is used along with [Axios](https://github.com/axios/axios) which is simple to use the library to make HTTP requests in both NodeJS and browser.
+
+## Writing testable React components
+
+For testing ReactJS, we have used [React Testing Library](https://testing-library.com/) which allows you to test ReactJS components while using testing best practices.
+
+Follow below rules to make your components testable and reusable -
+
+* Design your components without class. Functional ReactJS components are easy to test.
+
+* Do not use states in your component instead use state management libraries like [storeon](https://github.com/amit08255/storeon). Use container components to manage states and storeon stores.
+
+* Design your components small and dump. It must not contain any logic.
+
+* Separate I/O such as network requests from your components.
+
+* Do not test internals of your component such as states. Your tests must be independent of internal working of your components.
 
 ## Organizing test files
 
