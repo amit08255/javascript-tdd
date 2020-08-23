@@ -1,7 +1,11 @@
 import React from 'react';
-import store from 'stores/homepage';
+import homepage from 'stores/homepage';
+import { createStoreon } from 'storeon';
 import { storeonLogger } from 'storeon/devtools';
 import { useStoreon, StoreContext } from 'storeon/react';
+import { getApiUserKey } from 'services/api';
+
+const store = createStoreon([homepage]);
 
 const Container = () => {
     const devKey = 'HF7L8scxdRXF76KYrtoDyrQCOVoVwqR_';
@@ -10,6 +14,17 @@ const Container = () => {
     const { dispatch, username, password } = useStoreon([
         'username', 'password', 'get/userkey', storeonLogger(store),
     ]);
+
+    const onButtonClick = () => {
+        const data = {
+            username: store.get().username,
+            password: store.get().password,
+            devKey,
+        };
+
+        const promise = getApiUserKey(data).then((r) => r.data);
+        dispatch('get/userkey', promise);
+    };
 
     return (
         <div>
@@ -26,7 +41,12 @@ const Container = () => {
                 onChange={(e) => dispatch('password', e.target.value)}
             />
 
-            <button onClick={() => dispatch('get/userkey', devKey)} type="button">Submit</button>
+            <button
+                onClick={onButtonClick}
+                type="button"
+            >
+                Submit
+            </button>
         </div>
     );
 };

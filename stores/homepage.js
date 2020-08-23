@@ -1,5 +1,3 @@
-import { createStoreon } from 'storeon';
-import { getApiUserKey } from 'services/api';
 // Initial state, reducers and business logic are packed in independent modules
 const homepage = (store) => {
     // Initial state
@@ -17,22 +15,14 @@ const homepage = (store) => {
         userKey: value,
     }));
 
-    store.on('get/userkey', async (state, devKey) => {
+    store.on('get/userkey', async (state, promise) => {
         try {
-            const data = {
-                username: state.username,
-                password: state.password,
-                devKey,
-            };
-
-            const response = await getApiUserKey(data);
-            store.dispatch('userkey', response.data);
+            const response = await promise;
+            store.dispatch('userkey', response);
         } catch (e) {
             store.dispatch('errors/server-error');
         }
     });
 };
 
-const store = createStoreon([homepage]);
-
-export default store;
+export default homepage;
