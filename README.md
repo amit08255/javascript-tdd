@@ -118,9 +118,9 @@ Follow below rules to make your components testable and reusable -
 
 * Design your components without class. Functional ReactJS components are easy to test.
 
-* Do not use states in your component instead use state management libraries like [storeon](https://github.com/amit08255/storeon). Use container components to manage states and storeon stores.
+* Do not use states in your component instead use state management libraries like [storeon](https://github.com/amit08255/storeon). Use container components to manage states and state stores.
 
-* Design your components small and dump. It must not contain any logic.
+* Design your components small and dumb. It must not contain any logic.
 
 * Separate I/O such as network requests from your components.
 
