@@ -1,29 +1,9 @@
+const jestCommon = require('./test/jest-common');
+
 module.exports = {
-    rootDir: './',
-    verbose: true,
-    testEnvironment: 'jsdom',
-    /* "moduleNameMapper": {
-      "^utilities/(.*)": "<rootDir>/utilities/$1",
-      "^services/(.*)": "<rootDir>/services/$1",
-      "^contexts/(.*)": "<rootDir>/contexts/$1",
-      "^components/(.*)": "<rootDir>/components/$1",
-      "^containers/(.*)": "<rootDir>/containers/$1",
-      "^storeon/(.*)": "<rootDir>/storeon/$1"
-    }, */
-    coveragePathIgnorePatterns: [
-        '/node_modules/',
-        '/.next/',
-        'enzyme.js',
+    ...jestCommon,
+    projects: [
+        './test/jest.client.js',
+        './test/jest.server.js',
     ],
-    testRegex: '(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$',
-    moduleFileExtensions: [
-        'js',
-        'jsx',
-        'json',
-        'node',
-    ],
-    transform: {
-        '^.+\\.(js|jsx)$': 'babel-jest',
-    },
-    testPathIgnorePatterns: ['<rootDir>/.next/', '<rootDir>/node_modules/', '<rootDir>/dist/'],
 };
