@@ -15,6 +15,8 @@ describe('Login component tests', () => {
             />,
         );
 
+        expect(screen.getByPlaceholderText(/username/i)).toBeInTheDocument();
+        expect(screen.getByPlaceholderText(/password/i)).toBeInTheDocument();
         expect(screen.getByText(/submit/i)).toBeInTheDocument();
     });
 
