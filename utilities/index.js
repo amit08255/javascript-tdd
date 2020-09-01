@@ -63,6 +63,20 @@ export const when = (cond, f) => (x) => (cond(x) ? f(x) : x);
 export const unless = (cond, f) => (x) => (cond(x) ? x : f(x));
 
 /**
+ * A function that returns the `!` of its argument. It will return `true` when
+ * passed false-y value, and `false` when passed a truth-y one.
+ * @param {*} a any value
+ * @return {Boolean} the logical inverse of passed argument.
+ * @example
+ *
+ *      not(true); //=> false
+ *      not(false); //=> true
+ *      not(0); //=> true
+ *      not(1); //=> false
+ */
+export const not = (a) => !a;
+
+/**
  * Checks equality of values
  * @param {any} a
  * @returns {(b:any) => boolean}
@@ -75,23 +89,93 @@ export const concatString = (a) => (b) => a + b;
 
 export const getEmptyObject = () => {};
 
-export const isObject = (value) => typeof value === 'object';
+export const isObject = (x) => Object.prototype.toString.call(x) === '[object Object]';
 
 export const isValueEmpty = (val) => (`${val}`).trim().length <= 0;
 
 export const isValueNumber = (val) => typeof val === 'number';
 
+/**
+ * Determine if the passed argument is an integer.
+ *
+ * @param {*} n
+ * @return {Boolean}
+ */
+
+export const isInteger = (n) => typeof n === 'number' && n % 1 === 0;
+
+export const isString = (x) => Object.prototype.toString.call(x) === '[object String]';
+
 export const isValidValue = (val) => (val !== undefined && val !== null);
 
 export const isArrayEmpty = (val) => Array.isArray(val) && val.length < 1;
 
-export const isArray = (val) => Array.isArray(val);
+export const isArray = (val) => (
+    (val != null
+        && val.length >= 0
+        && Object.prototype.toString.call(val) === '[object Array]')
+);
 
 export const isNotArray = (val) => !Array.isArray(val);
 
 export const getEmptyArray = () => [];
 
 export const getNull = () => null;
+
+/**
+ * Divides the first parameter by the second and returns the remainder. Note
+ * that this function preserves the JavaScript-style behavior for modulo. For
+ * mathematical modulo see [`mathMod`](#mathMod).
+ *
+ * @param {number} a
+ * @returns {function(number): number}
+ */
+export const modulo = (a) => (b) => a % b;
+
+/**
+ * Returns the result of calling its first argument with the remaining
+ * arguments. This is occasionally useful as a converging function for
+ * [`R.converge`](#converge): the first branch can produce a function while the
+ * remaining branches produce values to be passed to that function as its
+ * arguments.
+ * @param {Function} fn The function to apply to the remaining arguments.
+ * @param {...*} args Any number of positional arguments.
+ * @return {*}
+ * @example
+ * call(add, 1, 2); //=> 3
+ */
+export function call(fn, ...args) {
+    return fn.apply(this, Array.prototype.slice.call(args, 1));
+}
+
+/**
+ * Returns a function that always returns the given value. Note that for
+ * non-primitives the value returned is a reference to the original value.
+ *
+ * This function is known as `const`, `constant`, or `K` (for K combinator) in
+ * other languages and libraries.
+ * @param {*} val The value to wrap in a function
+ * @return {Function} A Function :: * -> val.
+ * @example
+ *
+ *      const t = always('Tee');
+ *      t(); //=> 'Tee'
+ */
+export const always = (val) => () => val;
+
+/**
+ * A function that does nothing but return the parameter supplied to it. Good
+ * as a default or placeholder function.
+ * @param {*} x The value to return.
+ * @return {*} The input value, `x`.
+ * @example
+ *
+ *      identity(1); //=> 1
+ *
+ *      const obj = {};
+ *      identity(obj) === obj; //=> true
+ */
+export const identity = (x) => x;
 
 /**
  * Returns a string made by inserting the `separator` between each element and
@@ -112,7 +196,7 @@ export const join = (str) => (list) => list.join(str);
  * @returns {(newValue:any) => (obj:any) => any}
  * @example
  *
- *      R.assoc('c', 3, {a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
+ *      assoc('c')(3)({a: 1, b: 2}); //=> {a: 1, b: 2, c: 3}
  */
 
 export const assoc = (prop) => (newValue) => (obj = {}) => ({
@@ -164,6 +248,14 @@ export const otherwise = (callback) => (promise) => (
 );
 
 /**
+ * Runs array of promises in parallel and returns a promise which resolves when all
+ * promises are resolved.
+ * @param array
+ * @returns {Promise<unknown[]>}
+ */
+export const promiseAll = (array) => Promise.all(array);
+
+/**
  * Returns whether or not a path exists in an object. Only the object's
  * own properties are checked.
  * @param {Array<string>} _path
@@ -202,8 +294,8 @@ export const has = (prop) => (obj) => hasPath([prop], obj);
  * @return {Object} A new object with only properties from `names` on it.
  * @example
  *
- *      R.pick(['a', 'd'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
- *      R.pick(['a', 'e', 'f'], {a: 1, b: 2, c: 3, d: 4}); //=> {a: 1}
+ *      pick(['a', 'd'])({a: 1, b: 2, c: 3, d: 4}); //=> {a: 1, d: 4}
+ *      pick(['a', 'e', 'f'])({a: 1, b: 2, c: 3, d: 4}); //=> {a: 1}
  */
 export const pick = (names, obj) => {
     const result = {};
@@ -245,10 +337,9 @@ function objectAssign(target, ...args) {
  *
  * @param {Array} list An array of objects
  * @return {Object} A merged object.
- *
- *      R.mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
- *      R.mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
- * @symb R.mergeAll([{ x: 1 }, { y: 2 }, { z: 3 }]) = { x: 1, y: 2, z: 3 }
+ * @example
+ *      mergeAll([{foo:1},{bar:2},{baz:3}]); //=> {foo:1,bar:2,baz:3}
+ *      mergeAll([{foo:1},{foo:2},{bar:2}]); //=> {foo:2,bar:2}
  */
 export const mergeAll = (list) => objectAssign(...[{}].concat(list));
 
@@ -261,12 +352,11 @@ export const mergeAll = (list) => objectAssign(...[{}].concat(list));
  * @return {(r:Object) => Object}
  * @example
  *
- *      R.mergeRight({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
+ *      mergeRight({ 'name': 'fred', 'age': 10 }, { 'age': 40 });
  *      //=> { 'name': 'fred', 'age': 40 }
  *
- *      const withDefaults = R.mergeRight({x: 0, y: 0});
+ *      const withDefaults = mergeRight({x: 0, y: 0});
  *      withDefaults({y: 2}); //=> {x: 0, y: 2}
- * @symb R.mergeRight(a, b) = {...a, ...b}
  */
 export const mergeRight = (l) => (r) => objectAssign({}, l, r);
 
@@ -279,11 +369,107 @@ export const mergeRight = (l) => (r) => objectAssign({}, l, r);
  * @return {(r:Object) => Object}
  * @example
  *
- *      R.mergeLeft({ 'age': 40 }, { 'name': 'fred', 'age': 10 });
+ *      mergeLeft({ 'age': 40 }, { 'name': 'fred', 'age': 10 });
  *      //=> { 'name': 'fred', 'age': 40 }
  *
- *      const resetToDefault = R.mergeLeft({x: 0});
+ *      const resetToDefault = mergeLeft({x: 0});
  *      resetToDefault({x: 5, y: 2}); //=> {x: 0, y: 2}
- * @symb R.mergeLeft(a, b) = {...b, ...a}
  */
 export const mergeLeft = (l) => (r) => objectAssign({}, r, l);
+
+/**
+ * Returns the nth element of the given list or string. If n is negative the
+ * element at index length + n is returned.
+ * @param {Number} offset
+ * @returns {(list:any) => any}
+ * @example
+ *
+ *      const list = ['foo', 'bar', 'baz', 'quux'];
+ *      nth(1)(list); //=> 'bar'
+ *      nth(-1)(list); //=> 'quux'
+ *      nth(-99)(list); //=> undefined
+ *
+ *      nth(2)('abc'); //=> 'c'
+ *      nth(3)('abc'); //=> ''
+ */
+
+export const nth = (offset) => (list) => {
+    const idx = offset < 0 ? list.length + offset : offset;
+    return isString(list) ? list.charAt(idx) : list[idx];
+};
+
+/**
+ * Retrieves the values at given paths of an object.
+ * @param {Array} pathsArray The array of paths to be fetched.
+ * @return {(obj:Object) => Array} obj The object to retrieve the nested properties from.
+ * @example
+ *
+ *      paths([['a', 'b'], ['p', 0, 'q']])({a: {b: 2}, p: [{q: 3}]}); //=> [2, 3]
+ *      paths([['a', 'b'], ['p', 'r']])({a: {b: 2}, p: [{q: 3}]}); //=> [2, undefined]
+ */
+export const paths = (pathsArray) => (obj) => pathsArray.map((path) => {
+    let val = obj;
+    let idx = 0;
+    let p;
+
+    while (idx < path.length) {
+        if (val == null) {
+            return;
+        }
+        p = path[idx];
+        val = isInteger(p) ? nth(p)(val) : val[p];
+        idx += 1;
+    }
+
+    // eslint-disable-next-line consistent-return
+    return val;
+});
+
+/**
+ * Retrieve the value at a given path.
+ * @param {Array} path The path to use.
+ * @param {Object} obj The object to retrieve the nested property from.
+ * @return {(obj:Object) => any} The data at `path`.
+ * @example
+ *
+ *      path(['a', 'b'])({a: {b: 2}}); //=> 2
+ *      path(['a', 'b'])({c: {b: 2}}); //=> undefined
+ *      path(['a', 'b', 0])({a: {b: [1, 2, 3]}}); //=> 1
+ *      path(['a', 'b', -2])({a: {b: [1, 2, 3]}}); //=> 2
+ */
+export const path = (pathAr) => (obj) => paths([pathAr])(obj)[0];
+
+export const concatList = (set1) => (set2) => {
+    const seta = set1 || [];
+    const setb = set2 || [];
+    let idx;
+    const len1 = set1.length;
+    const len2 = set2.length;
+    const result = [];
+
+    idx = 0;
+    while (idx < len1) {
+        result[result.length] = seta[idx];
+        idx += 1;
+    }
+    idx = 0;
+    while (idx < len2) {
+        result[result.length] = setb[idx];
+        idx += 1;
+    }
+    return result;
+};
+
+/**
+ * Returns a new list containing the contents of the given list, followed by
+ * the given element.
+ * @param {*} el The element to add to the end of the new list.
+ * @return {(list:Array) => Array}
+ * A new list containing the elements of the old list followed by `el`.
+ * @example
+ *
+ *      append('tests')(['write', 'more']); //=> ['write', 'more', 'tests']
+ *      append('tests')([]); //=> ['tests']
+ *      append(['tests'])(['write', 'more']); //=> ['write', 'more', ['tests']]
+ */
+export const append = (el) => (list) => concatList(list)([el]);
