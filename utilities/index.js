@@ -15,6 +15,25 @@ export const compose = (...fns) => (...args) => fns.reduceRight(
 )[0];
 
 /**
+ * It expects a function as input and returns its curried version.
+ * @param {Function} fn
+ * @param {*} args
+ * @returns {Function}
+ * @example
+ *      const fn = (a, b, c) => a + b + c
+        const curried = curry(fn)
+        const sum = curried(1,2)
+
+        const result = sum(3) // => 6
+ */
+export function curry(fn, args = []) {
+    return (..._args) => ((rest) => (rest.length >= fn.length ? fn(...rest) : curry(fn, rest)))([
+        ...args,
+        ..._args,
+    ]);
+}
+
+/**
  * Map utility is used with mappable values like - array to map values with
  * given function to process on every value in mappable.
  * @example
@@ -81,9 +100,19 @@ export const not = (a) => !a;
  * @param {any} a
  * @returns {(b:any) => boolean}
  */
-export const isEqual = (a) => (b) => a === b;
+export const isEqual = curry((a, b) => a === b);
 
-export const isNotEqual = (a) => (b) => a !== b;
+export const isNotEqual = curry((a, b) => a !== b);
+
+/**
+ * Returns `true` if both arguments are `true`; `false` otherwise.
+ */
+export const and = curry((a, b) => a && b);
+
+/**
+ * Returns `true` if either arguments are `true`; `false` otherwise.
+ */
+export const or = curry((a, b) => a || b);
 
 export const concatString = (a) => (b) => a + b;
 
@@ -473,3 +502,75 @@ export const concatList = (set1) => (set2) => {
  *      append(['tests'])(['write', 'more']); //=> ['write', 'more', ['tests']]
  */
 export const append = (el) => (list) => concatList(list)([el]);
+
+/**
+ * Tests whether or not an object is similar to an array.
+ * @param {*} x The object to test.
+ * @return {Boolean}
+ * `true` if `x` has a numeric length property and extreme indices defined; `false` otherwise.
+ * @example
+ *
+ *      isArrayLike([]); //=> true
+ *      isArrayLike(true); //=> false
+ *      isArrayLike({}); //=> false
+ *      isArrayLike({length: 10}); //=> false
+ *      isArrayLike({0: 'zero', 9: 'nine', length: 10}); //=> true
+ */
+const isArrayLike = (x) => {
+    if (isArray(x)) { return true; }
+    if (!x) { return false; }
+    if (typeof x !== 'object') { return false; }
+    if (isString(x)) { return false; }
+    if (x.nodeType === 1) { return !!x.length; }
+    if (x.length === 0) { return true; }
+    if (x.length > 0) {
+        return (
+            Object.prototype.hasOwnProperty.call(x, 0)
+            && Object.prototype.hasOwnProperty.call(x, x.length - 1)
+        );
+    }
+    return false;
+};
+
+/**
+ * `makeFlat` is a helper function that returns a one-level or fully recursive
+ * function based on the flag passed in.
+ */
+export default function makeFlat(recursive) {
+    return function flatt(list) {
+        let value; let jlen; let
+            j;
+        const result = [];
+        let idx = 0;
+        const ilen = list.length;
+
+        while (idx < ilen) {
+            if (isArrayLike(list[idx])) {
+                value = recursive ? flatt(list[idx]) : list[idx];
+                j = 0;
+                jlen = value.length;
+                while (j < jlen) {
+                    result[result.length] = value[j];
+                    j += 1;
+                }
+            } else {
+                result[result.length] = list[idx];
+            }
+            idx += 1;
+        }
+        return result;
+    };
+}
+
+/**
+ * Returns a new list by pulling every item out of it (and all its sub-arrays)
+ * and putting them in a new array, depth-first.
+ * @func
+ * @param {Array} list The array to consider.
+ * @return {Array} The flattened list.
+ * @example
+ *
+ *      flatten([1, 2, [3, 4], 5, [6, [7, 8, [9, [10, 11], 12]]]]);
+ *      //=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+ */
+export const flatten = makeFlat(true);
