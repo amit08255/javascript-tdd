@@ -6,6 +6,7 @@
   "scripts": {
     "transpile": "npx babel ./ --out-dir dist --ignore '/**/*.spec.js','/**/*.test.js','/**/*.jsx','./dist/','./node_modules/','./.next/','./__tests__/','./pages/','./jest.config.js'",
     "lint": "eslint . --ext .jsx,.js",
+    "lint:fix": "eslint . --fix --ext .jsx,.js",
     "dev": "next",
     "build": "next build",
     "start": "next start",

@@ -276,6 +276,11 @@ export const otherwise = (callback) => (promise) => (
     isPromise(promise) === true ? promise.then(null, callback) : null
 );
 
+// An utility function to be used with async function to handle promise (API calls) with await
+// without writing exception codes
+export const then = (promise) => promise.then((data) => [null, data])
+    .catch((err) => [err]);
+
 /**
  * Runs array of promises in parallel and returns a promise which resolves when all
  * promises are resolved.
@@ -574,3 +579,86 @@ export default function makeFlat(recursive) {
  *      //=> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
  */
 export const flatten = makeFlat(true);
+
+/**
+ * This checks whether a function has a [methodname] function. If it isn't an
+ * array it will execute that function otherwise it will default to the ramda
+ * implementation.
+ * @param {Function} fn ramda implemtation
+ * @param {String} methodname property to check for a custom implementation
+ * @return {Object} Whatever the return value of the method is.
+ */
+function checkForMethod(methodname, fn) {
+    function func(...args) {
+        const { length } = args;
+        if (length === 0) {
+            return fn();
+        }
+        const obj = args[length - 1];
+        return (isArray(obj) || typeof obj[methodname] !== 'function')
+            ? fn.apply(this, args)
+            : obj[methodname].apply(obj, ...args);
+    }
+    return func;
+}
+
+/**
+ * Iterate over an input `list`, calling a provided function `fn` for each
+ * element in the list.
+ *
+ * `fn` receives one argument: *(value)*.
+ *
+ * Note: `R.forEach` does not skip deleted or unassigned indices (sparse
+ * arrays), unlike the native `Array.prototype.forEach` method. For more
+ * details on this behavior, see:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach#Description
+ *
+ * Also note that, unlike `Array.prototype.forEach`, Ramda's `forEach` returns
+ * the original array. In some libraries this function is named `each`.
+ *
+ * Dispatches to the `forEach` method of the second argument, if present.
+ *
+ * @param {Function} fn The function to invoke. Receives one argument, `value`.
+ * @param {Array} list The list to iterate over.
+ * @return {Array} The original list.
+ * @example
+ *
+ *      const printXPlusFive = x => console.log(x + 5);
+ *      forEach(printXPlusFive, [1, 2, 3]); //=> [1, 2, 3]
+ *      // logs 6
+ *      // logs 7
+ *      // logs 8
+ *      forEach(f, [a, b, c]) = [a, b, c]
+ */
+export const forEach = checkForMethod('forEach', (fn) => (list) => {
+    const len = list.length;
+    let idx = 0;
+    while (idx < len) {
+        fn(list[idx]);
+        idx += 1;
+    }
+    return list;
+});
+
+/**
+ * Remove duplicate values from array by comparing a given list of values returned by a function
+ * @param {Function} func Function to return array of values used to filter item with
+ * @return {(arr:Array) => Array}
+ * @example
+ *      const fun = (item) => [item.id, item.name];
+ *      const data = [{id: 1, name: 'a'}, {id: 2, name: 'b'}, {id: 1, name: 'a'}];
+ *      const result = uniqBy(fun)(data) //=> [{id: 1, name: 'a'}, {id: 2, name: 'b'}]
+ */
+export const uniqBy = (func) => (arr) => {
+    const seen = new Set();
+
+    return arr.filter((it) => {
+        const values = func(it);
+        const exists = values.filter((v) => seen.has(v));
+        if (exists.length === values.length) {
+            return false;
+        }
+        values.map((v) => seen.add(v));
+        return true;
+    });
+};
