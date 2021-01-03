@@ -116,8 +116,6 @@ export const or = curry((a, b) => a || b);
 
 export const concatString = (a) => (b) => a + b;
 
-export const getEmptyObject = () => {};
-
 export const isObject = (x) => Object.prototype.toString.call(x) === '[object Object]';
 
 export const isValueEmpty = (val) => (`${val}`).trim().length <= 0;
@@ -149,7 +147,26 @@ export const isNotArray = (val) => !Array.isArray(val);
 
 export const getEmptyArray = () => [];
 
-export const getNull = () => null;
+export const isNil = (x) => x == null;
+
+/**
+ * Convert any value to string
+ * @param {any} val
+ * @returns {string}
+ */
+export const toString = (val) => String(val);
+
+/**
+ * Convert string to lowercase
+ * @param {string} str
+ */
+export const toLower = (str) => str.toLowerCase(str);
+
+/**
+ * Convert string to uppercase
+ * @param {string} str
+ */
+export const toUpper = (str) => str.toUpperCase(str);
 
 /**
  * Divides the first parameter by the second and returns the remainder. Note
@@ -160,6 +177,34 @@ export const getNull = () => null;
  * @returns {function(number): number}
  */
 export const modulo = (a) => (b) => a % b;
+
+
+const ws = '\x09\x0A\x0B\x0C\x0D\x20\xA0\u1680\u180E\u2000\u2001\u2002\u2003'
+         + '\u2004\u2005\u2006\u2007\u2008\u2009\u200A\u202F\u205F\u3000\u2028'
+         + '\u2029\uFEFF';
+
+const zeroWidth = '\u200b';
+
+const hasProtoTrim = (typeof String.prototype.trim === 'function');
+/**
+ * Removes (strips) whitespace from both ends of the string.
+ * @param {String} str The string to trim.
+ * @return {String} Trimmed version of `str`.
+ * @example
+ *
+ *      trim('   xyz  '); //=> 'xyz'
+ *      map(trim, split(',', 'x, y, z')); //=> ['x', 'y', 'z']
+ */
+export const trim = !hasProtoTrim || (ws.trim() || !zeroWidth.trim())
+    ? function trim(str) {
+        const beginRx = new RegExp(`^[${ ws }][${ ws }]*`);
+        const endRx = new RegExp(`[${ ws }][${ ws }]*$`);
+        return str.replace(beginRx, '').replace(endRx, '');
+    }
+    : function trim(str) {
+        return str.trim();
+    };
+
 
 /**
  * Returns the result of calling its first argument with the remaining
@@ -661,4 +706,40 @@ export const uniqBy = (func) => (arr) => {
         values.map((v) => seen.add(v));
         return true;
     });
+};
+
+/**
+ * Makes a shallow clone of an object, setting or overriding the nodes required
+ * to create the given path, and placing the specific value at the tail end of
+ * that path. Note that this copies and flattens prototype properties onto the
+ * new object as well. All non-primitive properties are copied by reference.
+ *
+ * @func
+ * @param {Array} pathObj the path to set
+ * @return {(val:any) => (obj:Object) => Object} A new object with updated path value.
+ * @example
+ *
+ *      assocPath(['a', 'b', 'c'], 42, {a: {b: {c: 0}}}); //=> {a: {b: {c: 42}}}
+ *
+ *      // Any missing or non-object keys in path will be overridden
+ *      assocPath(['a', 'b', 'c'], 42, {a: 5}); //=> {a: {b: {c: 42}}}
+ */
+export const assocPath = (pathObj) => (val) => (obj) => {
+    if (pathObj.length === 0) {
+        return val;
+    }
+
+    const idx = pathObj[0];
+    if (pathObj.length > 1) {
+        // eslint-disable-next-line no-nested-ternary
+        const nextObj = (!isNil(obj) && has(idx)(obj)) ? obj[idx] : isInteger(pathObj[1]) ? [] : {};
+        // eslint-disable-next-line no-param-reassign
+        val = assocPath(Array.prototype.slice.call(pathObj, 1))(val)(nextObj);
+    }
+    if (isInteger(idx) && isArray(obj)) {
+        const arr = [].concat(obj);
+        arr[idx] = val;
+        return arr;
+    }
+    return assoc(idx)(val)(obj);
 };
